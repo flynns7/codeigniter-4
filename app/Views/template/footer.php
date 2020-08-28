@@ -6,7 +6,7 @@
 </footer>
 
 <script>
-    window.role = "<?= $this->sessionApp['role_as'] ?>/";
+    window.role = "<?= $sessionApp['role_as'] ?>/";
     window.baseUrl = "<?= base_url() ?>";
     window.sessionApp =
         <?= json_encode(array(
@@ -30,7 +30,7 @@
 <script src="<?= scripts("buttons.html5.min.js") ?>"></script>
 <script src="<?= scripts("buttons.print.min.js") ?>"></script>
 <script>
-    <?= ($js != "") ? $this->load->view($js) : "" ?>
+    <?= ($js != "") ? $this->include($js) : "" ?>
 </script>
 
 <div id="modal-image-view" class="modal fade" tabindex="-1" role="dialog">

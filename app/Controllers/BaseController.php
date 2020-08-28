@@ -29,7 +29,7 @@ class BaseController extends Controller
 	protected $helpers = ['url', 'form'];
 	protected $varivaleFromBase = 'its variable from base';	
 	private $isRequireSession = true;
-	public $sessionApp = null;
+	public $sessionApp = ['role_as' => null, 'email' => null, 'name' => null, 'image' => null];
 
 	protected $title = APPNAME;
 	protected $content = array(
@@ -65,5 +65,19 @@ class BaseController extends Controller
 
 		// $layout = ($single) ? $this->layout : "template/master";
 		echo view($this->layout, $this->content);
+	}
+
+	protected function respond($code, $message, $data = null)
+	{
+		exit(json_encode(array(
+			"error" => $code,
+			"message" => $message,
+			"data" => $data
+		)));
+	}
+	
+	protected function isRequiredSession($value)
+	{
+		$this->isRequireSession = $value;
 	}
 }
