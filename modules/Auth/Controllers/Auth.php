@@ -7,18 +7,15 @@ class Auth  extends \App\Controllers\BaseController
 	public function __construct()
 	{
 		$this->model = model('Auth_model', 'model');
+		$this->session = \Config\Services::session();
 		$this->isRequiredSession(false);
 	}
 
 	public function index()
 	{
-		if ($this->sessionApp["id"] != null && $this->sessionApp["role_id"] == 1){
-			redirect(linkTo("dashboard"), 'refresh');
-		}else if($this->sessionApp["id"] != null && $this->sessionApp["role_id"] == 2){
-			redirect(linkTo("transaksi-mitra"), 'refresh');
-		}
-
-		$this->load->view('index');
+		$this->layout = 'Modules\Auth\Views\index';
+		$this->content['js'] = 'Modules\Auth\Views\index.js';
+		$this->display();
 	}
 
 	public function process()
@@ -30,26 +27,26 @@ class Auth  extends \App\Controllers\BaseController
 		$is_user = $this->model->checkUser($login['username']);
 
 		if (is_null($is_user)) {
-			$this->session->set_flashdata('login_error', 1);
-			$this->session->set_flashdata('login_message', "User Not Found");
+			$this->session->markAsFlashdata('login_error', 1);
+			$this->session->markAsFlashdata('login_message', "User Not Found");
 			$this->respond(1, "User Not Found");
 		}
 
 		if (!compare_password($is_user->password, $login['password'])) {
-			$this->session->set_flashdata('login_error', 1);
-			$this->session->set_flashdata('login_message', "Wrong Password");
+			$this->session->markAsFlashdata('login_error', 1);
+			$this->session->markAsFlashdata('login_message', "Wrong Password");
 			$this->respond(1, "Wrong Password");
 		}
 
 		$data_user = $this->model->getUser($is_user->id);
-		$this->session->set_userdata(SESSIONCODE, $data_user);
+		$this->session->set(SESSIONCODE, $data_user);
 		$this->respond(0, "Success Login");
 	}
 
 	public function logout()
 	{
-		$this->session->sess_destroy();
-		redirect('panel', 'refresh');
+		$this->session->destroy();
+		return redirect()->to('panel'); 
 	}
 
 	public function notFound()

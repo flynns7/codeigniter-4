@@ -33,6 +33,7 @@
         </main>
     </div>
     <?= $this->include("template/footer"); ?>
+    <?= view($js) ?>
 </body>
 
 </html>

@@ -6,8 +6,9 @@ class User extends \App\Controllers\BaseController
 
 	public function index()
 	{	
+		$this->actionPage = array("refresh","filter","add");
 		$this->layout = 'Modules\User\Views\index';
-		$this->content['test'] = 'test';
+		$this->content['js'] = 'Modules\User\Views\index.js';
 		$this->display();
 	}
 

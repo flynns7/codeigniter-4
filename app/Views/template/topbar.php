@@ -22,7 +22,7 @@
                     <i class="fa fa-user"></i> Profile</a>
                 <a class="dropdown-item" href="#">
                     <i class="fa fa-wrench"></i> Settings</a>
-                <a class="dropdown-item" href="">
+                <a class="dropdown-item" href="<?= base_url('logout') ?>">
                     <i class="fa fa-lock"></i> Logout</a>
             </div>
         </li>

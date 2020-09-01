@@ -29,8 +29,8 @@ class BaseController extends Controller
 	protected $helpers = ['url', 'form'];
 	protected $varivaleFromBase = 'its variable from base';	
 	private $isRequireSession = true;
-	public $sessionApp = ['role_as' => null, 'email' => null, 'name' => null, 'image' => null];
-
+	public $sessionApp = ['role_as' => null, 'email' => null, 'name' => null, 'image' => null, 'id'];
+	protected $actionPage;
 	protected $title = APPNAME;
 	protected $content = array(
 		"js" => "",
@@ -62,8 +62,8 @@ class BaseController extends Controller
 		$this->content["content"] 		= $this->layout;
 		$this->content["pageTitle"] 	= $this->title;
 		$this->content["sessionApp"] 	= $this->sessionApp;
+		$this->content['actionPage'] 	= $this->actionPage;
 
-		// $layout = ($single) ? $this->layout : "template/master";
 		echo view($this->layout, $this->content);
 	}
 
