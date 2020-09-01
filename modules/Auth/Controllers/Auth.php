@@ -6,8 +6,8 @@ class Auth  extends \App\Controllers\BaseController
   
 	public function __construct()
 	{
-		$this->session = \Config\Services::session();
 		$this->isRequiredSession(false);
+		$this->session = \Config\Services::session();
 	}
 
 	public function index()
@@ -38,7 +38,7 @@ class Auth  extends \App\Controllers\BaseController
 			$this->respond(1, "Wrong Password");
 		}
 
-		$data_user = $this->model->getUser($is_user->id);
+		$data_user = $model->getUser($is_user->id);
 		$this->session->set(SESSIONCODE, $data_user);
 		$this->respond(0, "Success Login");
 	}

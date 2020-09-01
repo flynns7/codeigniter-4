@@ -1,5 +1,5 @@
 <?php
-namespace Libraries;
+namespace App\Libraries;
 
 use Defuse\Crypto\Crypto;
 use Config\App;

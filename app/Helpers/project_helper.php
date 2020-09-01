@@ -1,7 +1,7 @@
 <?php
 
 use GuzzleHttp\Client;
-use Libraries\DefuseEncryption;
+use App\Libraries\DefuseEncryption;
 function indonesianDate($date, $type = 1)
 {
     $array_month      = array("01" => "Januari", "02" => "Februari", "03" => "Maret", "04" => "April", "05" => "Mei", "06" => "Juni", "07" => "Juli", "08" => "Agustus", "09" => "September", "10" => "Oktober", "11" => "November", "12" => "Desember");
@@ -160,9 +160,7 @@ function casting_no_alias()
 function compare_password($p1, $p2)
 {
     $decryptor = new DefuseEncryption();
-    var_dump($decryptor);
-    exit();
-    $password = $decryptor->defuseencryption->decrypt($p1);
+    $password = $decryptor->decrypt($p1);
     if ($password == $p2) return true;
     return false;
 }
