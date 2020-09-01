@@ -1,12 +1,11 @@
 <?php 
 namespace Modules\Auth\Controllers;
-
+use \Modules\Auth\Models\AuthModel;
 class Auth  extends \App\Controllers\BaseController
 {
   
 	public function __construct()
 	{
-		$this->model = model('Auth_model', 'model');
 		$this->session = \Config\Services::session();
 		$this->isRequiredSession(false);
 	}
@@ -20,12 +19,13 @@ class Auth  extends \App\Controllers\BaseController
 
 	public function process()
 	{
+		$this->isAjax();
+		$model = new AuthModel();
 		$login = array(
-			"username" => $this->security->xss_clean($this->input->post("username")),
-			"password" => $this->security->xss_clean($this->input->post("password")),
+			"username" => $this->request->getPost("username"),
+			"password" => $this->request->getPost("password"),
 		);
-		$is_user = $this->model->checkUser($login['username']);
-
+		$is_user = $model->checkUser($login['username']);
 		if (is_null($is_user)) {
 			$this->session->markAsFlashdata('login_error', 1);
 			$this->session->markAsFlashdata('login_message', "User Not Found");

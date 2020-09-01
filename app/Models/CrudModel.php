@@ -57,7 +57,7 @@ class CRUD_model extends Model
 
         $this->builder->insert($data);
 
-        return  $this->builder->insertID();
+        return  $this->db->insertID();
     }
 
     function updateData($table, $id_table, $id, $data)
@@ -73,7 +73,7 @@ class CRUD_model extends Model
 
     function getConfig($configName)
     {
-        return $this->builder->where("name", $configName)
+        return $this->builder->where("name", $configName)->get()
             ->getRow();
     }
 
@@ -103,9 +103,8 @@ class CRUD_model extends Model
             ->join("management_system.web_menu_role b", "a.id = b.menu_id AND b.role_id = " . $session_id)
             ->where("a.parent", $parent)
             ->where("a.state", 1)
-            ->orderBy("a.sort", "ASC")
-            ->get();
-        return ($parent == 0) ? $query->getResult('array') : $query;
+            ->orderBy("a.sort", "ASC");
+        return ($parent == 0) ? $query->get()->getResultArray() : $query;
     }
 
 }

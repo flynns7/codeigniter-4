@@ -1,7 +1,7 @@
 <?php
 
 use GuzzleHttp\Client;
-
+use Libraries\DefuseEncryption;
 function indonesianDate($date, $type = 1)
 {
     $array_month      = array("01" => "Januari", "02" => "Februari", "03" => "Maret", "04" => "April", "05" => "Mei", "06" => "Juni", "07" => "Juli", "08" => "Agustus", "09" => "September", "10" => "Oktober", "11" => "November", "12" => "Desember");
@@ -97,46 +97,26 @@ function rupiah($amount, $prefix = "Rp")
 function remUnderscoreToUppercase($string){
     implode(" ",explode("_",$string));
 }
-function spelledNumber($x)
-{
-    $number = array("", "Satu", "Dua", "Tiga", "Empat", "Lima", "Enam", "Tujuh", "Delapan", "Sembilan", "Sepuluh", "Sebelas");
-    if ($x < 12) {
-        return " " . $number[$x];
-    } elseif ($x < 20) {
-        return $this->getCharOfRupiah($x - 10) . "Belas";
-    } elseif ($x < 100) {
-        return $this->getCharOfRupiah($x / 10) . " Puluh" . $this->getCharOfRupiah($x % 10);
-    } elseif ($x < 200) {
-        return " Seratus" . $this->Terbilang($x - 100);
-    } elseif ($x < 1000) {
-        return $this->getCharOfRupiah($x / 100) . " Ratus" . $this->getCharOfRupiah($x % 100);
-    } elseif ($x < 2000) {
-        return " Seribu" . $this->getCharOfRupiah($x - 1000);
-    } elseif ($x < 1000000) {
-        return $this->getCharOfRupiah($x / 1000) . " Ribu" . $this->getCharOfRupiah($x % 1000);
-    } elseif ($x < 1000000000) {
-        return $this->getCharOfRupiah($x / 1000000) . " Juta" . $this->getCharOfRupiah($x % 1000000);
-    }
-}
 
 function getMenu()
 {
-    $ci = &get_instance();
-    $session_app = $ci->session->userdata(SESSIONCODE);
-    $main_menu = $ci->crud->getMenu();
+    $crud = new \App\Models\CRUD_model("system.menu");
+    $session = \Config\Services::session();
+    $session_app = $session->get(SESSIONCODE);
+    $main_menu = $crud->getMenu();
     foreach ($main_menu as $main) {
         extract($main, EXTR_PREFIX_ALL, "main");
-        $sub_menu_data = $ci->crud->getMenu($main_id);
-        $with_sub = ($sub_menu_data->num_rows() > 0) ? 'nav-dropdown' : '';
-        $with_sub_toogle = ($sub_menu_data->num_rows() > 0) ? 'nav-dropdown-toggle' : '';
+        $sub_menu_data = $crud->getMenu($main_id);
+        $with_sub = ($sub_menu_data->countAllResults() > 0) ? 'nav-dropdown' : '';
+        $with_sub_toogle = ($sub_menu_data->countAllResults() > 0) ? 'nav-dropdown-toggle' : '';
 
         echo '<li class="nav-item"><li class="sidebar-nav-item ' . $with_sub . '">';
         echo '<a href="' . base_url(str_replace("{role}", $session_app["role_as"], $main_url)) . '" class="nav-link ' . $with_sub_toogle . '">';
         echo '<i class="nav-icon icon-' . $main_icon . '"></i> ' . $main_name;
         echo '</a>';
-        if ($sub_menu_data->num_rows() > 0) {
+        if ($sub_menu_data->countAllResults() > 0) {
             echo '<ul class="nav-dropdown-items">';
-            foreach ($sub_menu_data->result_array() as $sub) {
+            foreach ($sub_menu_data->get()->getResultArray() as $sub) {
                 extract($sub, EXTR_PREFIX_ALL, "sub");
 
                 echo '<li class="nav-item">';
@@ -179,8 +159,10 @@ function casting_no_alias()
 
 function compare_password($p1, $p2)
 {
-    $ci = &get_instance();
-    $password = $ci->defuseencryption->decrypt($p1);
+    $decryptor = new DefuseEncryption();
+    var_dump($decryptor);
+    exit();
+    $password = $decryptor->defuseencryption->decrypt($p1);
     if ($password == $p2) return true;
     return false;
 }
@@ -229,7 +211,7 @@ function notifExpo($title, $body, $to, $id, $invoice = 1, $url = "")
     $response = curl_exec($curl);
     $err = curl_error($curl);
     curl_close($curl);
-    $ci = &get_instance();
+    $crud = new \App\Models\CRUD_model('firebase_notification');
 
     $saveData = array(
         "user_id" => $id,
@@ -237,7 +219,7 @@ function notifExpo($title, $body, $to, $id, $invoice = 1, $url = "")
         "message" => $body
     );
 
-    $ci->crud->insertData("firebase_notification", $saveData);
+    $crud->insertData($saveData);
 
     return $response;
 }

@@ -102,6 +102,9 @@ defined('E_2001')                or define("E_2001", "Masalah pada server");
 defined('E_3001')                or define("E_3001", "Pengiriman data korup");
 defined('E_3002')                or define("E_3002", "Permintaan data belum lengkap");
 
+
+// CURL
+defined('FIREBASE_LEGACY_KEYS')  or define("FIREBASE_LEGACY_KEYS", "");
 defined('TIMEOUT_GUZZLE')        or define("TIMEOUT_GUZZLE", 60);
 
 $protocol = (isset( $_SERVER['HTTPS'] ) AND $_SERVER['HTTPS'] == 'on') ? 'https' : 'http';

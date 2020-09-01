@@ -74,6 +74,7 @@ $.validator.setDefaults({
         var url = $(form).attr("action");
         var data = $(form).serialize();
         var code = $(form).data("code");
+        console.log(url);
         submitData(url, data, code);
         return false;
     }
@@ -126,6 +127,7 @@ function submitData(url, submitData, code) {
         type: "POST",
         data: submitData,
         dataType: "JSON",
+        headers: {'X-Requested-With': 'XMLHttpRequest'},
         beforeSend: function (xhr) {
             beforeRequesting(code);
         },

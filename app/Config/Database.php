@@ -51,6 +51,27 @@ class Database extends \CodeIgniter\Database\Config
 		'port'     => 3306,
 	];
 
+	public $development = [
+		'DSN'      => '',
+		'hostname' => '167.71.205.101',
+		'username' => 'postgres',
+		'password' => 'cpnpgsql1919',
+		'database' => 'allpayment_dev',
+		'DBDriver' => 'postgre',
+		'DBPrefix' => '',
+		'pConnect' => false,
+		'DBDebug'  => (ENVIRONMENT !== 'production'),
+		'cacheOn'  => false,
+		'cacheDir' => '',
+		'charset'  => 'utf8',
+		'DBCollat' => 'utf8_general_ci',
+		'swapPre'  => '',
+		'encrypt'  => false,
+		'compress' => false,
+		'strictOn' => false,
+		'failover' => [],
+		'port'     => 5432,
+	];
 	/**
 	 * This database connection is used when
 	 * running PHPUnit database tests.
@@ -91,6 +112,26 @@ class Database extends \CodeIgniter\Database\Config
 		if (ENVIRONMENT === 'testing')
 		{
 			$this->defaultGroup = 'tests';
+
+			// Under Travis-CI, we can set an ENV var named 'DB_GROUP'
+			// so that we can test against multiple databases.
+			if ($group = getenv('DB'))
+			{
+				if (is_file(TESTPATH . 'travis/Database.php'))
+				{
+					require TESTPATH . 'travis/Database.php';
+
+					if (! empty($dbconfig) && array_key_exists($group, $dbconfig))
+					{
+						$this->tests = $dbconfig[$group];
+					}
+				}
+			}
+		}		
+		
+		if (ENVIRONMENT === 'development')
+		{
+			$this->defaultGroup = 'development';
 
 			// Under Travis-CI, we can set an ENV var named 'DB_GROUP'
 			// so that we can test against multiple databases.

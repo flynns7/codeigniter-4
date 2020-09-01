@@ -265,4 +265,6 @@ class App extends BaseConfig
 	|   - http://www.w3.org/TR/CSP/
 	*/
 	public $CSPEnabled = false;
+	//extended config
+	public $encryption_key = 'Ch4r!smaP3rsAd4nU5An4tara';
 }

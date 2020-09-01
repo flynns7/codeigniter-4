@@ -26,7 +26,7 @@ class BaseController extends Controller
 	 *
 	 * @var array
 	 */
-	protected $helpers = ['url', 'form'];
+	protected $helpers = ['url', 'form', 'project'];
 	protected $varivaleFromBase = 'its variable from base';	
 	private $isRequireSession = true;
 	public $sessionApp = ['role_as' => null, 'email' => null, 'name' => null, 'image' => null, 'id'];
@@ -76,6 +76,11 @@ class BaseController extends Controller
 		)));
 	}
 	
+	protected function isAjax(){
+		if(!$this->request->isAJAX())
+		throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+	}
+
 	protected function isRequiredSession($value)
 	{
 		$this->isRequireSession = $value;

@@ -1,6 +1,5 @@
 <?php
 
-use Config\App;
 function random_strings($length_of_string) 
 { 
   
